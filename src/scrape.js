@@ -141,6 +141,7 @@ function scrape(cb) {
         return setImmediate(cb, err);
 
       return setImmediate(cb, null, {
+        timestamp: Date.now(),
         itemIds: itemIds,
         offers: allOffers
       });
@@ -162,7 +163,7 @@ if (require.main === module) {
     }
 
     console.log('Writing JSON file...');
-    const fileName = `offers_${Date.now()}.json`;
+    const fileName = `offers_${results.timestamp}.json`;
     jsonfile.writeFileSync(
       path.join(__dirname, '..', 'data', fileName),
       results
