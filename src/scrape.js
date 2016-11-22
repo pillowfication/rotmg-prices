@@ -36,7 +36,9 @@ function getItemIds(cb) {
       ).body,
       statement => statement.expression.callee.name === 'initializeOfferEditor'
     ).expression.arguments[3].elements.map(
-      expression => expression.elements[0].raw
+      expression => expression.elements[0].type === 'Literal' ?
+        expression.elements[0].raw :
+        `-${expression.elements[0].argument.raw}` // Negative number
     );
 
     return setImmediate(cb, null, itemData);
@@ -116,7 +118,7 @@ function scrape(cb) {
 
     console.log('Received item IDs');
     console.log('Fetching all offers...');
-    const results = {};
+    const allOffers = {};
 
     async.eachOfSeries(itemIds, (itemId, itemIndex, itemCb) => {
       async.eachSeries(['buy', 'sell'], (buyOrSell, offerCb) => {
@@ -127,7 +129,7 @@ function scrape(cb) {
 
           for (const offer of offers) {
             const identifier = createIdentifier(offer);
-            const data = results[identifier] || (results[identifier] = []);
+            const data = allOffers[identifier] || (allOffers[identifier] = []);
             data.push(offer.quantity);
           }
 
@@ -138,7 +140,10 @@ function scrape(cb) {
       if (err)
         return setImmediate(cb, err);
 
-      return setImmediate(cb, null, results);
+      return setImmediate(cb, null, {
+        itemIds: itemIds,
+        offers: allOffers
+      });
     });
   });
 }
@@ -155,9 +160,10 @@ if (require.main === module) {
       process.exit(1);
     }
 
-    jsonfile.writeFileSync(
-      path.join(__dirname, '..', 'data', `offers_${Date.now()}.json`),
-      results
-    );
+    console.log('Writing JSON file...');
+    const fileName = path.join(__dirname, '..', 'data', `offers_${Date.now()}.json`);
+    jsonfile.writeFileSync(fileName, results);
+    console.log('Done!');
+    console.log(`Data written to ${fileName}`);
   });
 }
