@@ -1,1 +1,1 @@
-module.exports = require('./offers_1479833956665.json');
+module.exports = require('./offers_1479842336886.json');
