@@ -1,0 +1,32 @@
+{
+  "name": "rotmg-prices",
+  "version": "1.0.0",
+  "description": "RotMG Price Guide",
+  "author": {
+    "name": "Markus Tran",
+    "email": "thebluepillow@gmail.com",
+    "url": "http://pillowfication.com"
+  },
+  "homepage": "https://github.com/pillowfication/rotmg-prices",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pillowfication/rotmg-prices.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pillowfication/rotmg-prices/issues"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "async": "^2.1.2",
+    "cheerio": "^0.22.0",
+    "eslint": "^3.9.1",
+    "eslint-config-pf": "1.0.6",
+    "esprima": "^3.1.1",
+    "jsonfile": "^2.4.0",
+    "request": "^2.79.0"
+  },
+  "keywords": [
+    "rotmg"
+  ],
+  "license": "MIT"
+}
