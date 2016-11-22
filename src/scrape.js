@@ -151,6 +151,7 @@ function scrape(cb) {
 module.exports = scrape;
 
 if (require.main === module) {
+  const fs = require('fs');
   const path = require('path');
   const jsonfile = require('jsonfile');
 
@@ -161,9 +162,19 @@ if (require.main === module) {
     }
 
     console.log('Writing JSON file...');
-    const fileName = path.join(__dirname, '..', 'data', `offers_${Date.now()}.json`);
-    jsonfile.writeFileSync(fileName, results);
+    const fileName = `offers_${Date.now()}.json`;
+    jsonfile.writeFileSync(
+      path.join(__dirname, '..', 'data', fileName),
+      results
+    );
+
+    console.log('Updating require...');
+    fs.writeFileSync(
+      path.join(__dirname, '..', 'data', 'index.js'),
+      `module.exports = require('./${fileName}');`
+    );
+
     console.log('Done!');
-    console.log(`Data written to ${fileName}`);
+    console.log(`Data written to data/${fileName}`);
   });
 }
