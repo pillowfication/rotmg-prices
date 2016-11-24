@@ -16,6 +16,9 @@
     "url": "https://github.com/pillowfication/rotmg-prices/issues"
   },
   "main": "index.js",
+  "scripts": {
+    "scrape": "node scripts/scrape.js"
+  },
   "devDependencies": {
     "async": "^2.1.2",
     "cheerio": "^0.22.0",

@@ -77,6 +77,8 @@ function getPage(buyOrSell, itemId, page, _logString, cb) {
 
     const $ = cheerio.load(res.body);
     if (page > 0) {
+      // When there is no `.pagination` element, or the first element of the
+      // `.pagination` button group is `.active`, then this is the first page.
       const pagination = $('.pagination');
       if (pagination.length === 0 || pagination[0].children[0].attribs.class === 'active')
         return setImmediate(cb, null, undefined);
@@ -102,7 +104,8 @@ function getPage(buyOrSell, itemId, page, _logString, cb) {
 /**
  * Create a unique representation of the offer. Trading (A, B for C) x2 is the
  * same as Trading (B, A for C) x3 (but with different weights). It is not the
- * same as Trading (C for A, B) even though they are equationally the same.
+ * same as Trading (C for A, B) since buy and sell orders will be treated as
+ * distinct variables.
  */
 function createIdentifier(offer) {
   const sellString = `${_(offer.sell).map(item => `${item.itemId}x${item.quantity}`).orderBy().join(',')}`;
@@ -172,7 +175,7 @@ if (require.main === module) {
     console.log('Updating require...');
     fs.writeFileSync(
       path.join(__dirname, '..', 'data', 'index.js'),
-      `module.exports = require('./${fileName}');`
+      `module.exports = require('./${fileName}');\n`
     );
 
     console.log('Done!');
