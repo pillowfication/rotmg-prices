@@ -1,1 +1,1 @@
-module.exports = require('./offers_1479842336886.json');
+module.exports = require('./2017-12-27.json')
