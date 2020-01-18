@@ -1,4 +1,4 @@
-const DATE = '2020-1-16'
+const DATE = '2020-1-18'
 const json = require(`./data/${DATE}.json`)
 
 const fs = require('fs')
@@ -6,6 +6,7 @@ const path = require('path')
 
 const regex = /[,\n"]/
 function csvEscape (value) {
+  if (value == null) return ''
   let escaped = String(value).replace('"', '""')
   if (regex.test(escaped)) {
     escaped = '"' + escaped + '"'
@@ -28,10 +29,10 @@ for (const key in json) {
 // Offers
 console.log('WRITE OFFERS')
 const offersPath = path.resolve(`./data/${DATE}.csv`)
-fs.writeFileSync(offersPath, 'group id,buy item,buy quantity,sell item,sell quantity,quantity,posted by\n')
+fs.writeFileSync(offersPath, 'group id,buy item,buy quantity,sell item,sell quantity,quantity,posted by,added,server\n')
 let groupId = 0
-for (const key in json) {
-  for (const offer of json[key].buy.concat(json[key].sell)) {
+for (const chunk of json) {
+  for (const offer of chunk.buy.concat(chunk.sell)) {
     for (let i = 0; i < Math.max(offer.s.length, offer.b.length); ++i) {
       fs.appendFileSync(offersPath, toCsvRow([
         groupId,
@@ -40,7 +41,9 @@ for (const key in json) {
         offer.s[i] ? offer.s[i].i : '',
         offer.s[i] ? offer.s[i].q : '',
         offer.q,
-        offer.u || ''
+        offer.u,
+        offer.a,
+        offer.v
       ]))
     }
     ++groupId

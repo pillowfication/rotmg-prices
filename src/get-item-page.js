@@ -80,6 +80,12 @@ async function getItemPage (itemId, buyOrSell) {
           .text()),
         u: $tr
           .find('td:nth-child(6)')
+          .text(),
+        a: $tr
+          .find('td:nth-child(4)')
+          .text(),
+        v: $tr
+          .find('td:nth-child(8)')
           .text()
       })
     })
